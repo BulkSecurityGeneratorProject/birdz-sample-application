@@ -1,0 +1,42 @@
+entity Customer {
+    firstName String required
+    lastName String required
+}
+
+entity Product {
+    name String required
+    description String
+}
+
+entity ProductOrder {
+    placedDate Instant required
+    code String required
+}
+
+entity OrderItem {
+    quantity Integer required min(0)
+    totalPrice BigDecimal required min(0)
+}
+
+relationship ManyToOne {
+	OrderItem{product(name) required} to Product
+}
+
+relationship OneToMany {
+   ProductOrder{orderItem} to OrderItem{order(code) required}
+}
+
+entity Invoice {
+    code String required
+    date Instant required
+    details String
+}
+
+entity Shipment {
+    trackingCode String
+    date Instant required
+}
+
+relationship OneToMany {
+    Invoice{shipment} to Shipment{invoice(code) required}
+}
